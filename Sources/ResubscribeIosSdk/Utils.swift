@@ -38,15 +38,20 @@ struct Utils {
     
     static func buildUrl(options: ResubscribeOptions) -> URL {
         var components = URLComponents(string: "\(appBaseUrl)/chat/\(options.slug)")!
-        components.queryItems = [
+        var queryItems = [
             URLQueryItem(name: "ait", value: options.aiType.rawValue),
             URLQueryItem(name: "uid", value: options.userId),
-            URLQueryItem(name: "email", value: options.userEmail),
             URLQueryItem(name: "iframe", value: "true"),
             URLQueryItem(name: "hideclose", value: "true")
         ]
+        if let email = options.userEmail {
+            queryItems.append(URLQueryItem(name: "email", value: email))
+        }
+        components.queryItems = queryItems
         components.fragment = "apiKey=\(options.apiKey)"
         let url = components.url!
+        let dl = Logger()
+        dl.debug("URL: \(url)")
         return url
     }
     
@@ -56,13 +61,15 @@ struct Utils {
         request.httpMethod = "GET"
         request.addValue(options.apiKey, forHTTPHeaderField: "X-API-Key")
         
-        let queryItems = [
+        var queryItems = [
             URLQueryItem(name: "slug", value: options.slug),
             URLQueryItem(name: "uid", value: options.userId),
-            URLQueryItem(name: "email", value: options.userEmail),
             URLQueryItem(name: "ait", value: options.aiType.rawValue),
             URLQueryItem(name: "brloc", value: getNavigatorLanguage())
         ]
+        if let email = options.userEmail {
+            queryItems.append(URLQueryItem(name: "email", value: email))
+        }
         
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         components.queryItems = queryItems
