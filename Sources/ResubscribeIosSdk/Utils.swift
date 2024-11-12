@@ -3,7 +3,7 @@ import SwiftUI
 import OSLog
 
 struct Utils {
-    static let apiBaseUrl = "https://api.resubscribe.ai"
+    static let apiBaseUrl = "https://api.resubscribe.ai/v1"
     static let appBaseUrl = "https://app.resubscribe.ai"
     
     static func getNavigatorLanguage() -> String {
